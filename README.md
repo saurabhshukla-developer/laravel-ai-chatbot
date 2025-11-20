@@ -3,7 +3,7 @@
 [![Latest Version](https://img.shields.io/github/v/release/saurabhshukla-developer/laravel-ai-chatbot)](https://github.com/saurabhshukla-developer/laravel-ai-chatbot/releases)
 [![License](https://img.shields.io/github/license/saurabhshukla-developer/laravel-ai-chatbot)](https://github.com/saurabhshukla-developer/laravel-ai-chatbot/blob/main/LICENSE)
 [![PHP Version](https://img.shields.io/badge/php-%3E%3D8.1-blue.svg)](https://www.php.net/)
-[![Laravel Version](https://img.shields.io/badge/laravel-%3E%3D10.0-red.svg)](https://laravel.com/)
+[![Laravel Version](https://img.shields.io/badge/laravel-10.x%20%7C%2011.x%20%7C%2012.x-red.svg)](https://laravel.com/)
 
 A comprehensive Laravel package for building AI agents with support for multiple AI providers (OpenAI, Anthropic, Google AI). Manage API keys, create AI agents, and interact with them seamlessly in your Laravel application.
 
@@ -26,8 +26,31 @@ A comprehensive Laravel package for building AI agents with support for multiple
 ### Installation
 
 1. **Install the package:**
+   
+   **Option 1: From GitHub (dev-master)**
    ```bash
-   composer require saurabhshukla-developer/laravel-ai-chatbot
+   # Add repository
+   composer config repositories.laravel-ai-chatbot vcs https://github.com/saurabhshukla-developer/laravel-ai-chatbot
+   
+   # Install dev-master version
+   composer require saurabhshukla-developer/laravel-ai-chatbot:dev-master
+   ```
+   
+   **Option 2: If you get minimum-stability error, add to composer.json:**
+   ```json
+   {
+       "minimum-stability": "dev",
+       "prefer-stable": true,
+       "repositories": [
+           {
+               "type": "vcs",
+               "url": "https://github.com/saurabhshukla-developer/laravel-ai-chatbot"
+           }
+       ],
+       "require": {
+           "saurabhshukla-developer/laravel-ai-chatbot": "dev-master"
+       }
+   }
    ```
 
 2. **Publish and migrate:**
@@ -51,7 +74,11 @@ A comprehensive Laravel package for building AI agents with support for multiple
 ### Step 1: Install via Composer
 
 ```bash
-composer require saurabhshukla-developer/laravel-ai-chatbot
+# Add repository first
+composer config repositories.laravel-ai-chatbot vcs https://github.com/saurabhshukla-developer/laravel-ai-chatbot
+
+# Then require dev-master version
+composer require saurabhshukla-developer/laravel-ai-chatbot:dev-master
 ```
 
 ### Step 2: Publish Configuration and Migrations
@@ -286,7 +313,7 @@ Views will be published to `resources/views/vendor/chatbot/`.
 ## Requirements
 
 - PHP 8.1 or higher
-- Laravel 10.x or 11.x
+- Laravel 10.x, 11.x, or 12.x
 - Guzzle HTTP Client
 
 ## License
