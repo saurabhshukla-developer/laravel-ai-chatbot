@@ -2,12 +2,25 @@
 
 This guide explains how to test the Laravel AI Chatbot package.
 
+## Quick Start
+
+The fastest way to test the package:
+
+```bash
+# Install dependencies
+composer install
+
+# Run all tests
+vendor/bin/phpunit
+```
+
 ## Table of Contents
 
-1. [Running Unit Tests](#running-unit-tests)
-2. [Testing in a Laravel Application](#testing-in-a-laravel-application)
-3. [Manual Testing](#manual-testing)
-4. [Test Coverage](#test-coverage)
+1. [Quick Start](#quick-start)
+2. [Running Unit Tests](#running-unit-tests)
+3. [Testing in a Laravel Application](#testing-in-a-laravel-application)
+4. [Manual Testing](#manual-testing)
+5. [Test Coverage](#test-coverage)
 
 ## Running Unit Tests
 

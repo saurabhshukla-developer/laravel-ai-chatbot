@@ -6,8 +6,42 @@
 
 #### Option A: Install from GitHub (Recommended)
 
+**Quick Install:**
 ```bash
-composer require saurabhshukla-developer/laravel-ai-chatbot
+# Add repository
+composer config repositories.laravel-ai-chatbot vcs https://github.com/saurabhshukla-developer/laravel-ai-chatbot
+
+# Install dev-master version
+composer require saurabhshukla-developer/laravel-ai-chatbot:dev-master
+```
+
+**Or add to your `composer.json` manually:**
+
+The repository configuration should be added to **your Laravel application's `composer.json`** file, NOT in the package's composer.json. Add it after `license` and before `require`:
+
+```json
+{
+    "license": "MIT",
+    
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/saurabhshukla-developer/laravel-ai-chatbot"
+        }
+    ],
+    
+    "require": {
+        "saurabhshukla-developer/laravel-ai-chatbot": "dev-master"
+    }
+}
+```
+
+**Note:** If you get a minimum-stability error, add this to your `composer.json`:
+```json
+{
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
 ```
 
 Or add to your `composer.json`:

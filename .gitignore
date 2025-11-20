@@ -10,5 +10,7 @@ composer.lock
 coverage/
 .env
 .env.backup
-.phpunit.result.cache
+*.swp
+*.swo
+*~
 

@@ -23,6 +23,8 @@ A comprehensive Laravel package for building AI agents with support for multiple
 
 **For detailed setup instructions, see [SETUP.md](SETUP.md)**
 
+**Having issues? Check [TROUBLESHOOTING.md](TROUBLESHOOTING.md)**
+
 ### Installation
 
 1. **Install the package:**
