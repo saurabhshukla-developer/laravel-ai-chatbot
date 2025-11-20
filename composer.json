@@ -1,0 +1,62 @@
+{
+    "name": "saurabhshukla-developer/laravel-ai-chatbot",
+    "description": "A Laravel package for building AI agents with configurable API keys",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "chatbot",
+        "ai",
+        "openai",
+        "anthropic",
+        "claude",
+        "google-ai",
+        "ai-agents",
+        "machine-learning"
+    ],
+    "authors": [
+        {
+            "name": "Saurabh Shukla",
+            "email": "saurabhshukla.developer@gmail.com"
+        }
+    ],
+    "homepage": "https://github.com/saurabhshukla-developer/laravel-ai-chatbot",
+    "support": {
+        "issues": "https://github.com/saurabhshukla-developer/laravel-ai-chatbot/issues",
+        "source": "https://github.com/saurabhshukla-developer/laravel-ai-chatbot"
+    },
+    "require": {
+        "php": "^8.1",
+        "illuminate/support": "^10.0|^11.0",
+        "illuminate/database": "^10.0|^11.0",
+        "illuminate/http": "^10.0|^11.0",
+        "guzzlehttp/guzzle": "^7.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^8.0|^9.0",
+        "phpunit/phpunit": "^10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "LaravelAI\\Chatbot\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LaravelAI\\Chatbot\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "LaravelAI\\Chatbot\\ChatbotServiceProvider"
+            ],
+            "aliases": {
+                "Chatbot": "LaravelAI\\Chatbot\\Facades\\Chatbot"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
+

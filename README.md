@@ -1,0 +1,320 @@
+# Laravel AI Chatbot Package
+
+[![Latest Version](https://img.shields.io/github/v/release/saurabhshukla-developer/laravel-ai-chatbot)](https://github.com/saurabhshukla-developer/laravel-ai-chatbot/releases)
+[![License](https://img.shields.io/github/license/saurabhshukla-developer/laravel-ai-chatbot)](https://github.com/saurabhshukla-developer/laravel-ai-chatbot/blob/main/LICENSE)
+[![PHP Version](https://img.shields.io/badge/php-%3E%3D8.1-blue.svg)](https://www.php.net/)
+[![Laravel Version](https://img.shields.io/badge/laravel-%3E%3D10.0-red.svg)](https://laravel.com/)
+
+A comprehensive Laravel package for building AI agents with support for multiple AI providers (OpenAI, Anthropic, Google AI). Manage API keys, create AI agents, and interact with them seamlessly in your Laravel application.
+
+**Repository:** [https://github.com/saurabhshukla-developer/laravel-ai-chatbot](https://github.com/saurabhshukla-developer/laravel-ai-chatbot)
+
+## Features
+
+- 🔑 **API Key Management**: Securely store and manage API keys for multiple AI providers
+- 🤖 **AI Agent Builder**: Create and configure AI agents with custom prompts and settings
+- 🔌 **Multiple Providers**: Support for OpenAI, Anthropic (Claude), and Google AI
+- 💬 **Chat Interface**: Built-in chat interface for testing agents
+- 🔒 **Secure Storage**: API keys are encrypted in the database
+- 🎨 **Beautiful UI**: Modern, responsive interface built with Tailwind CSS
+- 📦 **Laravel Package**: Easy installation and integration
+
+## Quick Start
+
+**For detailed setup instructions, see [SETUP.md](SETUP.md)**
+
+### Installation
+
+1. **Install the package:**
+   ```bash
+   composer require saurabhshukla-developer/laravel-ai-chatbot
+   ```
+
+2. **Publish and migrate:**
+   ```bash
+   php artisan vendor:publish --provider="LaravelAI\Chatbot\ChatbotServiceProvider" --tag="chatbot-config"
+   php artisan vendor:publish --provider="LaravelAI\Chatbot\ChatbotServiceProvider" --tag="chatbot-migrations"
+   php artisan migrate
+   ```
+
+3. **Set your APP_KEY (if not set):**
+   ```bash
+   php artisan key:generate
+   ```
+
+4. **Start using:**
+   - Web UI: Visit `http://localhost:8000/chatbot/api-keys` to add API keys
+   - Or use programmatically (see Usage section below)
+
+## Installation (Detailed)
+
+### Step 1: Install via Composer
+
+```bash
+composer require saurabhshukla-developer/laravel-ai-chatbot
+```
+
+### Step 2: Publish Configuration and Migrations
+
+```bash
+php artisan vendor:publish --provider="LaravelAI\Chatbot\ChatbotServiceProvider" --tag="chatbot-config"
+php artisan vendor:publish --provider="LaravelAI\Chatbot\ChatbotServiceProvider" --tag="chatbot-migrations"
+```
+
+### Step 3: Run Migrations
+
+```bash
+php artisan migrate
+```
+
+### Step 4: (Optional) Publish Views
+
+If you want to customize the views:
+
+```bash
+php artisan vendor:publish --provider="LaravelAI\Chatbot\ChatbotServiceProvider" --tag="chatbot-views"
+```
+
+## Configuration
+
+After publishing the configuration file, you can customize it at `config/chatbot.php`:
+
+```php
+return [
+    'default_provider' => env('CHATBOT_DEFAULT_PROVIDER', 'openai'),
+    
+    'providers' => [
+        'openai' => [
+            'name' => 'OpenAI',
+            'api_url' => env('OPENAI_API_URL', 'https://api.openai.com/v1'),
+            'model' => env('OPENAI_MODEL', 'gpt-4'),
+            // ...
+        ],
+        // ...
+    ],
+    
+    'storage_driver' => env('CHATBOT_STORAGE_DRIVER', 'database'),
+    
+    'routes' => [
+        'prefix' => env('CHATBOT_ROUTE_PREFIX', 'chatbot'),
+        'middleware' => ['web'],
+    ],
+];
+```
+
+## Usage
+
+### Managing API Keys
+
+1. Navigate to `/chatbot/api-keys` in your browser
+2. Click "Add API Key"
+3. Select your provider and enter your API key
+4. Optionally set it as the default for that provider
+
+### Creating AI Agents
+
+1. Navigate to `/chatbot/agents` in your browser
+2. Click "Create Agent"
+3. Fill in the agent details:
+   - **Name**: A descriptive name for your agent
+   - **Provider**: Choose OpenAI, Anthropic, or Google AI
+   - **Model**: (Optional) Specific model to use
+   - **System Prompt**: (Optional) Define the agent's behavior and personality
+4. Save the agent
+
+### Using Agents in Code
+
+#### Basic Chat
+
+```php
+use LaravelAI\Chatbot\Facades\Chatbot;
+
+// Get an agent by slug or ID
+$agent = Chatbot::getAgent('my-agent-slug');
+
+// Chat with the agent
+$response = Chatbot::chat($agent, 'Hello, how are you?');
+
+echo $response['content'];
+```
+
+#### Using Specific Provider
+
+```php
+use LaravelAI\Chatbot\Facades\Chatbot;
+
+// Use a specific provider
+$provider = Chatbot::provider('openai');
+
+// Create an agent programmatically
+$agent = Chatbot::createAgent([
+    'name' => 'Customer Support Bot',
+    'slug' => 'customer-support',
+    'provider' => 'openai',
+    'system_prompt' => 'You are a helpful customer support assistant.',
+    'is_active' => true,
+]);
+
+// Chat with the agent
+$response = Chatbot::chat($agent, 'I need help with my order');
+```
+
+#### Streaming Responses
+
+```php
+use LaravelAI\Chatbot\Facades\Chatbot;
+
+$agent = Chatbot::getAgent('my-agent');
+
+foreach (Chatbot::streamChat($agent, 'Tell me a story') as $chunk) {
+    if (!$chunk['done']) {
+        echo $chunk['content'];
+        flush();
+    }
+}
+```
+
+#### Advanced Options
+
+```php
+$response = Chatbot::chat($agent, 'Your message', [
+    'temperature' => 0.9,
+    'max_tokens' => 1000,
+    'model' => 'gpt-4-turbo', // Override agent's default model
+]);
+```
+
+### Direct Provider Access
+
+```php
+use LaravelAI\Chatbot\Facades\Chatbot;
+
+$provider = Chatbot::provider('openai');
+$response = $provider->chat($agent, 'Hello');
+```
+
+## Routes
+
+The package automatically registers the following routes (with `/chatbot` prefix by default):
+
+- `GET /chatbot/api-keys` - List all API keys
+- `GET /chatbot/api-keys/create` - Create new API key form
+- `POST /chatbot/api-keys` - Store new API key
+- `GET /chatbot/api-keys/{id}/edit` - Edit API key form
+- `PUT /chatbot/api-keys/{id}` - Update API key
+- `DELETE /chatbot/api-keys/{id}` - Delete API key
+- `GET /chatbot/agents` - List all agents
+- `GET /chatbot/agents/create` - Create new agent form
+- `POST /chatbot/agents` - Store new agent
+- `GET /chatbot/agents/{id}` - View agent details and chat
+- `GET /chatbot/agents/{id}/edit` - Edit agent form
+- `PUT /chatbot/agents/{id}` - Update agent
+- `DELETE /chatbot/agents/{id}` - Delete agent
+- `POST /chatbot/agents/{id}/chat` - Chat with agent (API endpoint)
+
+## Environment Variables
+
+You can set these in your `.env` file:
+
+```env
+CHATBOT_DEFAULT_PROVIDER=openai
+CHATBOT_STORAGE_DRIVER=database
+CHATBOT_ROUTE_PREFIX=chatbot
+
+# Provider-specific (optional if using database storage)
+OPENAI_API_KEY=your-openai-key
+ANTHROPIC_API_KEY=your-anthropic-key
+GOOGLE_AI_API_KEY=your-google-key
+```
+
+## Security
+
+- API keys stored in the database are encrypted using Laravel's encryption
+- Make sure your `APP_KEY` is set in your `.env` file
+- API keys are never displayed in plain text in the UI
+- Consider adding authentication middleware to protect the routes
+
+## Supported Providers
+
+### OpenAI
+- Models: gpt-4, gpt-4-turbo, gpt-3.5-turbo, etc.
+- API Documentation: https://platform.openai.com/docs
+
+### Anthropic (Claude)
+- Models: claude-3-opus, claude-3-sonnet, claude-3-haiku, etc.
+- API Documentation: https://docs.anthropic.com
+
+### Google AI
+- Models: gemini-pro, gemini-pro-vision, etc.
+- API Documentation: https://ai.google.dev/docs
+
+## Customization
+
+### Custom Provider
+
+To add a custom provider, create a new provider class:
+
+```php
+namespace App\Providers;
+
+use LaravelAI\Chatbot\Providers\BaseProvider;
+use LaravelAI\Chatbot\Models\AiAgent;
+
+class CustomProvider extends BaseProvider
+{
+    protected function getProviderName(): string
+    {
+        return 'custom';
+    }
+
+    // Implement required methods...
+}
+```
+
+Then register it in the `ChatbotManager` class.
+
+### Custom Views
+
+Publish the views and customize them:
+
+```bash
+php artisan vendor:publish --tag="chatbot-views"
+```
+
+Views will be published to `resources/views/vendor/chatbot/`.
+
+## Requirements
+
+- PHP 8.1 or higher
+- Laravel 10.x or 11.x
+- Guzzle HTTP Client
+
+## License
+
+MIT License
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## Support
+
+For issues and questions, please open an issue on [GitHub](https://github.com/saurabhshukla-developer/laravel-ai-chatbot/issues).
+
+## Author
+
+**Saurabh Shukla**
+
+- GitHub: [@saurabhshukla-developer](https://github.com/saurabhshukla-developer)
+- Repository: [laravel-ai-chatbot](https://github.com/saurabhshukla-developer/laravel-ai-chatbot)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
