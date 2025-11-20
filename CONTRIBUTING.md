@@ -1,13 +1,12 @@
 # Contributing to Laravel AI Chatbot
 
-Thank you for considering contributing to Laravel AI Chatbot! This document provides guidelines and instructions for contributing.
+Contributions are welcome. This document outlines the process for contributing to Laravel AI Chatbot.
 
 ## Code of Conduct
 
 - Be respectful and inclusive
-- Welcome newcomers and help them learn
-- Focus on constructive feedback
-- Be open to different perspectives
+- Provide constructive feedback
+- Follow project coding standards
 
 ## Getting Started
 
@@ -110,7 +109,5 @@ Use the [GitHub issue tracker](https://github.com/saurabhshukla-developer/larave
 
 ## Questions?
 
-Feel free to open an issue for any questions or reach out to the maintainers.
-
-Thank you for contributing! 🎉
+Open an issue for questions or contact the maintainers.
 

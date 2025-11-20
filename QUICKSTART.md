@@ -1,7 +1,5 @@
 # Quick Start Guide
 
-Get up and running with Laravel AI Chatbot in 5 minutes!
-
 ## Prerequisites
 
 - Laravel 10.x or 11.x installed
@@ -185,15 +183,7 @@ composer dump-autoload
 
 ## Next Steps
 
-- 📖 Read [SETUP.md](SETUP.md) for detailed setup
-- 📚 Check [README.md](README.md) for full documentation
-- 💡 See [EXAMPLES.md](EXAMPLES.md) for code examples
-- 🔒 Add authentication to protect routes
-- 🎨 Customize the UI to match your app
-
-## Need Help?
-
-- Check the [README.md](README.md) for detailed API docs
-- See [EXAMPLES.md](EXAMPLES.md) for more code examples
-- Review [SETUP.md](SETUP.md) for production deployment
+- Read [SETUP.md](SETUP.md) for detailed setup
+- Check [README.md](README.md) for full documentation
+- See [EXAMPLES.md](EXAMPLES.md) for code examples
 

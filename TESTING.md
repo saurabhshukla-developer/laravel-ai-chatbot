@@ -289,17 +289,17 @@ Current test coverage includes:
 
 ### Unit Tests
 
-- ✅ ApiKey model encryption/decryption
-- ✅ ApiKey scopes (active, defaultForProvider)
-- ✅ AiAgent model creation
-- ✅ AiAgent slug generation
-- ✅ AiAgent scopes
+- ApiKey model encryption/decryption
+- ApiKey scopes (active, defaultForProvider)
+- AiAgent model creation
+- AiAgent slug generation
+- AiAgent scopes
 
 ### Feature Tests
 
-- ✅ ChatbotManager agent creation
-- ✅ ChatbotManager agent retrieval
-- ✅ ChatbotManager provider access
+- ChatbotManager agent creation
+- ChatbotManager agent retrieval
+- ChatbotManager provider access
 
 ### Areas Needing More Tests
 

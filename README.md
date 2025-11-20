@@ -11,65 +11,30 @@ A comprehensive Laravel package for building AI agents with support for multiple
 
 ## Features
 
-- 🔑 **API Key Management**: Securely store and manage API keys for multiple AI providers
-- 🤖 **AI Agent Builder**: Create and configure AI agents with custom prompts and settings
-- 🔌 **Multiple Providers**: Support for OpenAI, Anthropic (Claude), and Google AI
-- 💬 **Chat Interface**: Built-in chat interface for testing agents
-- 🔒 **Secure Storage**: API keys are encrypted in the database
-- 🎨 **Beautiful UI**: Modern, responsive interface built with Tailwind CSS
-- 📦 **Laravel Package**: Easy installation and integration
+- API key management with encrypted storage
+- AI agent builder with custom prompts
+- Multiple provider support (OpenAI, Anthropic, Google AI)
+- Built-in chat interface
+- Web UI for managing keys and agents
+- Programmatic API for code integration
+- Streaming support for responses
 
-## Quick Start
+## Installation
 
-**For detailed setup instructions, see [SETUP.md](SETUP.md)**
+```bash
+composer config repositories.laravel-ai-chatbot vcs https://github.com/saurabhshukla-developer/laravel-ai-chatbot
+composer require saurabhshukla-developer/laravel-ai-chatbot:dev-master
+```
 
-**Having issues? Check [TROUBLESHOOTING.md](TROUBLESHOOTING.md)**
+Publish configuration and migrations:
 
-### Installation
+```bash
+php artisan vendor:publish --provider="LaravelAI\Chatbot\ChatbotServiceProvider" --tag="chatbot-config"
+php artisan vendor:publish --provider="LaravelAI\Chatbot\ChatbotServiceProvider" --tag="chatbot-migrations"
+php artisan migrate
+```
 
-1. **Install the package:**
-   
-   **Option 1: From GitHub (dev-master)**
-   ```bash
-   # Add repository
-   composer config repositories.laravel-ai-chatbot vcs https://github.com/saurabhshukla-developer/laravel-ai-chatbot
-   
-   # Install dev-master version
-   composer require saurabhshukla-developer/laravel-ai-chatbot:dev-master
-   ```
-   
-   **Option 2: If you get minimum-stability error, add to composer.json:**
-   ```json
-   {
-       "minimum-stability": "dev",
-       "prefer-stable": true,
-       "repositories": [
-           {
-               "type": "vcs",
-               "url": "https://github.com/saurabhshukla-developer/laravel-ai-chatbot"
-           }
-       ],
-       "require": {
-           "saurabhshukla-developer/laravel-ai-chatbot": "dev-master"
-       }
-   }
-   ```
-
-2. **Publish and migrate:**
-   ```bash
-   php artisan vendor:publish --provider="LaravelAI\Chatbot\ChatbotServiceProvider" --tag="chatbot-config"
-   php artisan vendor:publish --provider="LaravelAI\Chatbot\ChatbotServiceProvider" --tag="chatbot-migrations"
-   php artisan migrate
-   ```
-
-3. **Set your APP_KEY (if not set):**
-   ```bash
-   php artisan key:generate
-   ```
-
-4. **Start using:**
-   - Web UI: Visit `http://localhost:8000/chatbot/api-keys` to add API keys
-   - Or use programmatically (see Usage section below)
+For detailed setup instructions, see [SETUP.md](SETUP.md).
 
 ## Installation (Detailed)
 
@@ -324,17 +289,13 @@ MIT License
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+Contributions are welcome. Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## Support
 
-For issues and questions, please open an issue on [GitHub](https://github.com/saurabhshukla-developer/laravel-ai-chatbot/issues).
+- **Issues**: [GitHub Issues](https://github.com/saurabhshukla-developer/laravel-ai-chatbot/issues)
+- **Security**: See [SECURITY.md](.github/SECURITY.md) for reporting security vulnerabilities
+- **Changelog**: See [CHANGELOG.md](CHANGELOG.md) for version history
 
 ## Author
 
