@@ -83,5 +83,17 @@ return [
     */
 
     'tools_path' => env('CHATBOT_TOOLS_PATH', 'app/Tools'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Tool Usage Logging
+    |--------------------------------------------------------------------------
+    |
+    | Enable logging of tool execution for debugging and monitoring.
+    | Set to true to log all tool calls and executions.
+    |
+    */
+
+    'log_tool_usage' => env('CHATBOT_LOG_TOOL_USAGE', false),
 ];
 

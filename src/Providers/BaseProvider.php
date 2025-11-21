@@ -96,6 +96,7 @@ abstract class BaseProvider implements ProviderInterface
     {
         $headers = $this->buildHeaders();
         $messages = [];
+        $executedTools = []; // Track all tools executed during this conversation
 
         // Handle tool calls in a loop (max 5 iterations to prevent infinite loops)
         $maxIterations = 5;
@@ -119,9 +120,31 @@ abstract class BaseProvider implements ProviderInterface
             // Check if AI wants to call a tool
             $toolCalls = $this->extractToolCalls($responseData);
             
+            // Log tool calls detection
+            if (!empty($toolCalls) && (config('app.debug') || config('chatbot.log_tool_usage', false))) {
+                \Log::info('🔍 Tool Calls Detected', [
+                    'count' => count($toolCalls),
+                    'tools' => array_map(function($call) {
+                        return $this->getToolNameFromCall($call);
+                    }, $toolCalls),
+                    'iteration' => $iteration + 1,
+                ]);
+            }
+            
             if (empty($toolCalls)) {
-                // No tool calls, return the final response
-                return $this->parseResponse($responseData);
+                // No tool calls, return the final response with executed tools info
+                $finalResponse = $this->parseResponse($responseData);
+                $finalResponse['executed_tools'] = $executedTools; // Add executed tools info
+                return $finalResponse;
+            }
+
+            // Track tool calls for this iteration
+            foreach ($toolCalls as $toolCall) {
+                $executedTools[] = [
+                    'name' => $this->getToolNameFromCall($toolCall),
+                    'arguments' => $this->getToolArgumentsFromCall($toolCall),
+                    'iteration' => $iteration + 1,
+                ];
             }
 
             // Execute tools and add results to messages
@@ -139,6 +162,12 @@ abstract class BaseProvider implements ProviderInterface
                     }
                 } catch (\Exception $e) {
                     // If tool execution fails, send error back
+                    if (config('app.debug') || config('chatbot.log_tool_usage', false)) {
+                        \Log::error('❌ Tool Execution Error', [
+                            'tool' => $this->getToolNameFromCall($toolCall),
+                            'error' => $e->getMessage(),
+                        ]);
+                    }
                     $errorMessage = $this->buildToolMessage($toolCall, [
                         'error' => $e->getMessage()
                     ]);
@@ -151,8 +180,10 @@ abstract class BaseProvider implements ProviderInterface
             $iteration++;
         }
 
-        // If we've reached max iterations, return the last response
-        return $this->parseResponse($lastResponse ?? []);
+        // If we've reached max iterations, return the last response with executed tools
+        $finalResponse = $this->parseResponse($lastResponse ?? []);
+        $finalResponse['executed_tools'] = $executedTools;
+        return $finalResponse;
     }
 
     /**
@@ -199,13 +230,39 @@ abstract class BaseProvider implements ProviderInterface
             throw new \Exception('Tool name not found in tool call');
         }
 
+        // Log tool execution (if debug mode is enabled)
+        if (config('app.debug') || config('chatbot.log_tool_usage', false)) {
+            \Log::info('🔧 Tool Execution Started', [
+                'tool' => $toolName,
+                'arguments' => $arguments,
+                'agent' => $agent->slug ?? $agent->id,
+            ]);
+        }
+
         // Try to execute file-based tool
         try {
             $tool = \LaravelAI\Chatbot\Tools\ToolLoader::getBySlug($toolName);
             if ($tool) {
-                return $tool->execute($arguments);
+                $result = $tool->execute($arguments);
+                
+                // Log successful execution
+                if (config('app.debug') || config('chatbot.log_tool_usage', false)) {
+                    \Log::info('✅ Tool Execution Completed', [
+                        'tool' => $toolName,
+                        'result' => is_array($result) ? $result : ['value' => $result],
+                    ]);
+                }
+                
+                return $result;
             }
         } catch (\Exception $e) {
+            // Log error
+            if (config('app.debug') || config('chatbot.log_tool_usage', false)) {
+                \Log::error('❌ Tool Execution Failed', [
+                    'tool' => $toolName,
+                    'error' => $e->getMessage(),
+                ]);
+            }
             // Tool not found, try database tool
         }
 
