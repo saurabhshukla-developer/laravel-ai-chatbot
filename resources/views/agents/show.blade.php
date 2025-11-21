@@ -58,6 +58,24 @@
                 <p class="text-sm text-gray-700 whitespace-pre-wrap">{{ $agent->system_prompt }}</p>
             </div>
         @endif
+
+        @if($agent->tools->count() > 0)
+            <div class="mb-4">
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">Tools</h3>
+                <ul class="list-disc list-inside">
+                    @foreach($agent->tools as $tool)
+                        <li>
+                            <a href="{{ route('chatbot.tools.show', $tool) }}" class="text-indigo-600 hover:text-indigo-900">
+                                {{ $tool->name }}
+                            </a>
+                            @if($tool->description)
+                                <span class="text-sm text-gray-500">- {{ $tool->description }}</span>
+                            @endif
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
     </div>
 
     <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">

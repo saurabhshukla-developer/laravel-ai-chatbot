@@ -4,7 +4,9 @@ namespace LaravelAI\Chatbot\Http\Controllers;
 
 use Illuminate\Http\Request;
 use LaravelAI\Chatbot\Models\AiAgent;
+use LaravelAI\Chatbot\Models\Tool;
 use LaravelAI\Chatbot\Facades\Chatbot;
+use LaravelAI\Chatbot\Tools\ToolLoader;
 
 class AiAgentController extends Controller
 {
@@ -24,8 +26,10 @@ class AiAgentController extends Controller
     public function create()
     {
         $providers = config('chatbot.providers', []);
+        $dbTools = Tool::active()->orderBy('name')->get();
+        $fileTools = ToolLoader::discover();
         
-        return view('chatbot::agents.create', compact('providers'));
+        return view('chatbot::agents.create', compact('providers', 'dbTools', 'fileTools'));
     }
 
     /**
@@ -42,10 +46,25 @@ class AiAgentController extends Controller
             'system_prompt' => 'nullable|string',
             'config' => 'nullable|array',
             'tools' => 'nullable|array',
+            'tool_ids' => 'nullable|array',
+            'tool_ids.*' => 'exists:chatbot_tools,id',
+            'file_tool_slugs' => 'nullable|array',
             'is_active' => 'boolean',
         ]);
 
-        Chatbot::createAgent($validated);
+        // Handle file-based tools
+        $config = $validated['config'] ?? [];
+        if ($request->has('file_tool_slugs')) {
+            $config['file_tools'] = $request->file_tool_slugs;
+        }
+        $validated['config'] = $config;
+
+        $agent = Chatbot::createAgent($validated);
+
+        // Sync database tools if provided
+        if ($request->has('tool_ids')) {
+            $agent->tools()->sync($request->tool_ids);
+        }
 
         return redirect()->route('chatbot.agents.index')
             ->with('success', 'AI agent created successfully.');
@@ -65,8 +84,10 @@ class AiAgentController extends Controller
     public function edit(AiAgent $agent)
     {
         $providers = config('chatbot.providers', []);
+        $dbTools = Tool::active()->orderBy('name')->get();
+        $fileTools = ToolLoader::discover();
         
-        return view('chatbot::agents.edit', compact('agent', 'providers'));
+        return view('chatbot::agents.edit', compact('agent', 'providers', 'dbTools', 'fileTools'));
     }
 
     /**
@@ -83,10 +104,30 @@ class AiAgentController extends Controller
             'system_prompt' => 'nullable|string',
             'config' => 'nullable|array',
             'tools' => 'nullable|array',
+            'tool_ids' => 'nullable|array',
+            'tool_ids.*' => 'exists:chatbot_tools,id',
+            'file_tool_slugs' => 'nullable|array',
             'is_active' => 'boolean',
         ]);
 
+        // Handle file-based tools
+        $config = $validated['config'] ?? $agent->config ?? [];
+        if ($request->has('file_tool_slugs')) {
+            $config['file_tools'] = $request->file_tool_slugs;
+        } else {
+            $config['file_tools'] = [];
+        }
+        $validated['config'] = $config;
+
         $agent->update($validated);
+
+        // Sync database tools if provided
+        if ($request->has('tool_ids')) {
+            $agent->tools()->sync($request->tool_ids);
+        } else {
+            // If tool_ids is not provided, clear all database tools
+            $agent->tools()->sync([]);
+        }
 
         return redirect()->route('chatbot.agents.index')
             ->with('success', 'AI agent updated successfully.');

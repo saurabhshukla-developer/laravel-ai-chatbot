@@ -38,6 +38,23 @@ class AnthropicProvider extends BaseProvider
             $payload['system'] = $agent->system_prompt;
         }
 
+        // Add tools if agent has any
+        $tools = $agent->getFormattedTools();
+        if (!empty($tools)) {
+            // Anthropic expects tools in a specific format
+            $payload['tools'] = array_map(function ($tool) {
+                // Extract function definition from OpenAI format
+                if (isset($tool['function'])) {
+                    return [
+                        'name' => $tool['function']['name'] ?? '',
+                        'description' => $tool['function']['description'] ?? '',
+                        'input_schema' => $tool['function']['parameters'] ?? [],
+                    ];
+                }
+                return $tool;
+            }, $tools);
+        }
+
         return $payload;
     }
 

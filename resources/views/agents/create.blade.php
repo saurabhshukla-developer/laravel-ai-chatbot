@@ -78,6 +78,63 @@
         </div>
 
         <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2">
+                Tools (Optional)
+            </label>
+            
+            @if(isset($fileTools) && count($fileTools) > 0)
+                <div class="mb-3">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">File-Based Tools</label>
+                    <div class="max-h-32 overflow-y-auto border rounded p-2 bg-green-50">
+                        @foreach($fileTools as $tool)
+                            <label class="flex items-center mb-2">
+                                <input type="checkbox" name="file_tool_slugs[]" value="{{ $tool->slug() }}" {{ in_array($tool->slug(), old('file_tool_slugs', [])) ? 'checked' : '' }} class="form-checkbox">
+                                <span class="ml-2 text-sm text-gray-700">
+                                    {{ $tool->name() }}
+                                    <span class="text-xs text-green-600">(File)</span>
+                                    @if($tool->description())
+                                        <span class="text-gray-500">- {{ Str::limit($tool->description(), 40) }}</span>
+                                    @endif
+                                </span>
+                            </label>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
+            @if(isset($dbTools) && count($dbTools) > 0)
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Database Tools</label>
+                    <div class="max-h-32 overflow-y-auto border rounded p-2">
+                        @foreach($dbTools as $tool)
+                            <label class="flex items-center mb-2">
+                                <input type="checkbox" name="tool_ids[]" value="{{ $tool->id }}" {{ in_array($tool->id, old('tool_ids', [])) ? 'checked' : '' }} class="form-checkbox">
+                                <span class="ml-2 text-sm text-gray-700">
+                                    {{ $tool->name }}
+                                    @if($tool->description)
+                                        <span class="text-gray-500">- {{ Str::limit($tool->description, 40) }}</span>
+                                    @endif
+                                </span>
+                            </label>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
+            @if((!isset($fileTools) || count($fileTools) === 0) && (!isset($dbTools) || count($dbTools) === 0))
+                <div class="border rounded p-3 bg-gray-50">
+                    <p class="text-sm text-gray-600 mb-2">No tools available.</p>
+                    <p class="text-xs text-gray-500">
+                        Create file-based tools in <code class="bg-gray-200 px-1 rounded">{{ config('chatbot.tools_path', 'app/Tools') }}</code> or 
+                        <a href="{{ route('chatbot.tools.create') }}" class="text-blue-500 hover:text-blue-700">create a database tool</a>.
+                    </p>
+                </div>
+            @endif
+
+            <p class="text-xs text-gray-500 mt-2">Select tools that this agent can use. File-based tools are automatically discovered from PHP files.</p>
+        </div>
+
+        <div class="mb-4">
             <label class="flex items-center">
                 <input type="checkbox" name="is_active" value="1" {{ old('is_active', true) ? 'checked' : '' }} class="form-checkbox">
                 <span class="ml-2 text-gray-700">Active</span>

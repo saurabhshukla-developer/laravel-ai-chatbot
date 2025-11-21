@@ -172,13 +172,16 @@ $agent = Chatbot::createAgent([
         'temperature' => 0.3, // Lower temperature for more focused responses
         'max_tokens' => 4000,
     ],
-    'tools' => [
-        'web_search',
-        'calculator',
-    ],
     'is_active' => true,
 ]);
+
+// Assign tools to the agent (see TOOLS_EXAMPLES.md for detailed tool examples)
+use LaravelAI\Chatbot\Models\Tool;
+$tools = Tool::whereIn('slug', ['web_search', 'calculator'])->get();
+$agent->tools()->attach($tools->pluck('id'));
 ```
+
+> **Note**: For comprehensive examples on creating and using tools, see [TOOLS_EXAMPLES.md](TOOLS_EXAMPLES.md)
 
 ### Example 9: Error Handling
 

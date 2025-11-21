@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use LaravelAI\Chatbot\Http\Controllers\ApiKeyController;
 use LaravelAI\Chatbot\Http\Controllers\AiAgentController;
+use LaravelAI\Chatbot\Http\Controllers\ToolController;
 
 $prefix = config('chatbot.routes.prefix', 'chatbot');
 $middleware = config('chatbot.routes.middleware', ['web']);
@@ -28,6 +29,17 @@ Route::prefix($prefix)->middleware($middleware)->group(function () {
         'edit' => 'chatbot.agents.edit',
         'update' => 'chatbot.agents.update',
         'destroy' => 'chatbot.agents.destroy',
+    ]);
+
+    // Tools Routes
+    Route::resource('tools', ToolController::class)->names([
+        'index' => 'chatbot.tools.index',
+        'create' => 'chatbot.tools.create',
+        'store' => 'chatbot.tools.store',
+        'show' => 'chatbot.tools.show',
+        'edit' => 'chatbot.tools.edit',
+        'update' => 'chatbot.tools.update',
+        'destroy' => 'chatbot.tools.destroy',
     ]);
 
     // Chat endpoint

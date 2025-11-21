@@ -42,6 +42,12 @@ class OpenAIProvider extends BaseProvider
             'max_tokens' => $options['max_tokens'] ?? $this->config['max_tokens'] ?? 2000,
         ];
 
+        // Add tools if agent has any
+        $tools = $agent->getFormattedTools();
+        if (!empty($tools)) {
+            $payload['tools'] = $tools;
+        }
+
         if (isset($options['stream'])) {
             $payload['stream'] = $options['stream'];
         }

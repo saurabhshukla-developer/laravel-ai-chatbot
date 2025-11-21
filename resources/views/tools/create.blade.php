@@ -1,0 +1,109 @@
+@extends('chatbot::layout')
+
+@section('title', 'Create Tool')
+
+@section('content')
+<div class="px-4 py-6 sm:px-0">
+    <h2 class="text-2xl font-bold text-gray-900 mb-6">Create Tool</h2>
+
+    <form action="{{ route('chatbot.tools.store') }}" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        @csrf
+
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
+                Name
+            </label>
+            <input type="text" name="name" id="name" value="{{ old('name') }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+            @error('name')
+                <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="slug">
+                Slug (Optional - auto-generated from name)
+            </label>
+            <input type="text" name="slug" id="slug" value="{{ old('slug') }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            <p class="text-xs text-gray-500 mt-1">Used as the function name in API calls. Must be unique.</p>
+            @error('slug')
+                <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
+                Description
+            </label>
+            <textarea name="description" id="description" rows="3" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">{{ old('description') }}</textarea>
+            <p class="text-xs text-gray-500 mt-1">Describe what this tool does. This will be shown to the AI model.</p>
+            @error('description')
+                <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="type">
+                Type
+            </label>
+            <select name="type" id="type" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                <option value="function" {{ old('type', 'function') === 'function' ? 'selected' : '' }}>Function</option>
+                <option value="api" {{ old('type') === 'api' ? 'selected' : '' }}>API</option>
+                <option value="custom" {{ old('type') === 'custom' ? 'selected' : '' }}>Custom</option>
+            </select>
+            @error('type')
+                <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="definition">
+                Definition (JSON)
+            </label>
+            <textarea name="definition" id="definition" rows="10" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline font-mono text-sm">{{ old('definition', '{
+  "type": "function",
+  "function": {
+    "name": "",
+    "description": "",
+    "parameters": {
+      "type": "object",
+      "properties": {},
+      "required": []
+    }
+  }
+}') }}</textarea>
+            <p class="text-xs text-gray-500 mt-1">Tool definition in OpenAI/Anthropic format. Should include function name, description, and parameters schema.</p>
+            @error('definition')
+                <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="implementation">
+                Implementation (Optional)
+            </label>
+            <textarea name="implementation" id="implementation" rows="8" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline font-mono text-sm">{{ old('implementation') }}</textarea>
+            <p class="text-xs text-gray-500 mt-1">PHP code or implementation details for executing this tool.</p>
+            @error('implementation')
+                <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <div class="mb-4">
+            <label class="flex items-center">
+                <input type="checkbox" name="is_active" value="1" {{ old('is_active', true) ? 'checked' : '' }} class="form-checkbox">
+                <span class="ml-2 text-gray-700">Active</span>
+            </label>
+        </div>
+
+        <div class="flex items-center justify-between">
+            <a href="{{ route('chatbot.tools.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                Cancel
+            </a>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Create Tool
+            </button>
+        </div>
+    </form>
+</div>
+@endsection
+

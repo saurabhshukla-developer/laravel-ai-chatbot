@@ -46,6 +46,29 @@ class GoogleProvider extends BaseProvider
             ],
         ];
 
+        // Add tools if agent has any
+        $tools = $agent->getFormattedTools();
+        if (!empty($tools)) {
+            // Google AI expects tools in a specific format
+            $functionDeclarations = array_map(function ($tool) {
+                // Extract function definition from OpenAI format
+                if (isset($tool['function'])) {
+                    return [
+                        'name' => $tool['function']['name'] ?? '',
+                        'description' => $tool['function']['description'] ?? '',
+                        'parameters' => $tool['function']['parameters'] ?? [],
+                    ];
+                }
+                return $tool;
+            }, $tools);
+            
+            $payload['tools'] = [
+                [
+                    'functionDeclarations' => $functionDeclarations,
+                ],
+            ];
+        }
+
         return $payload;
     }
 

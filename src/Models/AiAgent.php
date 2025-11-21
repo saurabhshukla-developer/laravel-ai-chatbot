@@ -3,6 +3,7 @@
 namespace LaravelAI\Chatbot\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class AiAgent extends Model
 {
@@ -41,11 +42,70 @@ class AiAgent extends Model
     }
 
     /**
+     * Get the tools associated with this agent.
+     */
+    public function tools(): BelongsToMany
+    {
+        return $this->belongsToMany(Tool::class, 'chatbot_agent_tools', 'agent_id', 'tool_id')
+            ->withTimestamps();
+    }
+
+    /**
      * Get the API key for this agent's provider.
      */
     public function getApiKey()
     {
         return ApiKey::defaultForProvider($this->provider)->first();
+    }
+
+    /**
+     * Get formatted tools for API calls.
+     */
+    public function getFormattedTools(): array
+    {
+        $formattedTools = [];
+        
+        // Get database tools
+        $dbTools = $this->tools()->active()->get();
+        foreach ($dbTools as $tool) {
+            $formattedTools[] = $tool->getFormattedDefinition();
+        }
+
+        // Get file-based tools (if any are assigned via tool_ids or config)
+        $fileBasedTools = $this->getFileBasedTools();
+        foreach ($fileBasedTools as $tool) {
+            $formattedTools[] = $tool->getDefinition();
+        }
+
+        // Fallback to legacy tools field if no relationships exist
+        if (empty($formattedTools) && !empty($this->tools)) {
+            return $this->tools;
+        }
+
+        return $formattedTools;
+    }
+
+    /**
+     * Get file-based tools assigned to this agent.
+     */
+    protected function getFileBasedTools(): array
+    {
+        // Check if agent has file-based tools configured
+        $fileToolSlugs = $this->config['file_tools'] ?? [];
+        
+        if (empty($fileToolSlugs)) {
+            return [];
+        }
+
+        $tools = [];
+        foreach ($fileToolSlugs as $slug) {
+            $tool = \LaravelAI\Chatbot\Tools\ToolLoader::getBySlug($slug);
+            if ($tool) {
+                $tools[] = $tool;
+            }
+        }
+
+        return $tools;
     }
 
     /**

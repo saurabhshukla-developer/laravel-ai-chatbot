@@ -13,9 +13,10 @@ A comprehensive Laravel package for building AI agents with support for multiple
 
 - API key management with encrypted storage
 - AI agent builder with custom prompts
+- **Tool management** - Create and assign function calling tools to agents
 - Multiple provider support (OpenAI, Anthropic, Google AI)
 - Built-in chat interface
-- Web UI for managing keys and agents
+- Web UI for managing keys, agents, and tools
 - Programmatic API for code integration
 - Streaming support for responses
 
@@ -114,7 +115,67 @@ return [
    - **Provider**: Choose OpenAI, Anthropic, or Google AI
    - **Model**: (Optional) Specific model to use
    - **System Prompt**: (Optional) Define the agent's behavior and personality
+   - **Tools**: (Optional) Select tools that the agent can use
 4. Save the agent
+
+### Creating Tools
+
+#### Method 1: File-Based Tools (Recommended - Easiest!)
+
+Create PHP files in `app/Tools/` directory:
+
+```php
+<?php
+
+namespace App\Tools;
+
+use LaravelAI\Chatbot\Tools\BaseTool;
+
+class CalculatorTool extends BaseTool
+{
+    public function name(): string
+    {
+        return 'Calculator';
+    }
+
+    public function description(): string
+    {
+        return 'Performs mathematical calculations';
+    }
+
+    public function parameters(): array
+    {
+        return [
+            'properties' => [
+                'expression' => [
+                    'type' => 'string',
+                    'description' => 'Mathematical expression (e.g., "2 + 2")',
+                ],
+            ],
+            'required' => ['expression'],
+        ];
+    }
+
+    public function execute(array $arguments): mixed
+    {
+        $expression = $arguments['expression'];
+        $result = eval("return {$expression};");
+        return ['result' => $result];
+    }
+}
+```
+
+**That's it!** The tool is automatically discovered and available for your agents. No database setup needed!
+
+#### Method 2: Database Tools (Via Web UI)
+
+1. Navigate to `/chatbot/tools` in your browser
+2. Click "Create Tool"
+3. Fill in the tool details and save
+
+For detailed examples, see:
+- **[TOOLS_README.md](TOOLS_README.md)** - File-based tools guide (Recommended)
+- **[TOOLS_EXAMPLES.md](TOOLS_EXAMPLES.md)** - Database tools and advanced examples
 
 ### Using Agents in Code
 
@@ -178,6 +239,28 @@ $response = Chatbot::chat($agent, 'Your message', [
 ]);
 ```
 
+#### Using Agents with Tools
+
+```php
+use LaravelAI\Chatbot\Facades\Chatbot;
+use LaravelAI\Chatbot\Models\Tool;
+
+// Get an agent
+$agent = Chatbot::getAgent('math-assistant');
+
+// Tools are automatically included when chatting
+$response = Chatbot::chat($agent, 'What is 25 * 4?');
+
+// The AI can use assigned tools to answer the question
+echo $response['content'];
+
+// To assign tools programmatically:
+$calculatorTool = Tool::where('slug', 'calculator')->first();
+$agent->tools()->attach($calculatorTool->id);
+```
+
+For more tool examples, see [TOOLS_EXAMPLES.md](TOOLS_EXAMPLES.md)
+
 ### Direct Provider Access
 
 ```php
@@ -205,6 +288,13 @@ The package automatically registers the following routes (with `/chatbot` prefix
 - `PUT /chatbot/agents/{id}` - Update agent
 - `DELETE /chatbot/agents/{id}` - Delete agent
 - `POST /chatbot/agents/{id}/chat` - Chat with agent (API endpoint)
+- `GET /chatbot/tools` - List all tools
+- `GET /chatbot/tools/create` - Create new tool form
+- `POST /chatbot/tools` - Store new tool
+- `GET /chatbot/tools/{id}` - View tool details
+- `GET /chatbot/tools/{id}/edit` - Edit tool form
+- `PUT /chatbot/tools/{id}` - Update tool
+- `DELETE /chatbot/tools/{id}` - Delete tool
 
 ## Environment Variables
 

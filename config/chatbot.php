@@ -72,5 +72,16 @@ return [
         'prefix' => env('CHATBOT_ROUTE_PREFIX', 'chatbot'),
         'middleware' => ['web'],
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Tools Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Configuration for file-based tools.
+    |
+    */
+
+    'tools_path' => env('CHATBOT_TOOLS_PATH', 'app/Tools'),
 ];
 
