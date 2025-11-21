@@ -1,6 +1,6 @@
 {
     "name": "saurabhshukla-developer/laravel-ai-chatbot",
-    "description": "A Laravel package for building AI agents with configurable API keys",
+    "description": "A comprehensive Laravel package for building AI agents with multiple provider support, tool management, and function calling capabilities",
     "type": "library",
     "license": "MIT",
     "keywords": [
@@ -12,7 +12,14 @@
         "claude",
         "google-ai",
         "ai-agents",
-        "machine-learning"
+        "machine-learning",
+        "function-calling",
+        "tools",
+        "ai-tools",
+        "chatbot-tools",
+        "gpt-4",
+        "claude-3",
+        "gemini"
     ],
     "authors": [
         {
