@@ -19,21 +19,24 @@ class OpenAIProvider extends BaseProvider
         ];
     }
 
-    protected function buildPayload(AiAgent $agent, string $message, array $options = []): array
+    protected function buildPayload(AiAgent $agent, string $message, array $options = [], array $existingMessages = []): array
     {
-        $messages = [];
+        $messages = !empty($existingMessages) ? $existingMessages : [];
 
-        if ($agent->system_prompt) {
+        // Only add system and user message if this is the first request
+        if (empty($existingMessages)) {
+            if ($agent->system_prompt) {
+                $messages[] = [
+                    'role' => 'system',
+                    'content' => $agent->system_prompt,
+                ];
+            }
+
             $messages[] = [
-                'role' => 'system',
-                'content' => $agent->system_prompt,
+                'role' => 'user',
+                'content' => $message,
             ];
         }
-
-        $messages[] = [
-            'role' => 'user',
-            'content' => $message,
-        ];
 
         $payload = [
             'model' => $options['model'] ?? $agent->model ?? $this->getDefaultModel(),
@@ -57,10 +60,58 @@ class OpenAIProvider extends BaseProvider
 
     protected function parseResponse(array $response): array
     {
+        $message = $response['choices'][0]['message'] ?? [];
+        
         return [
-            'content' => $response['choices'][0]['message']['content'] ?? '',
+            'content' => $message['content'] ?? '',
             'model' => $response['model'] ?? '',
             'usage' => $response['usage'] ?? [],
+            'tool_calls' => $message['tool_calls'] ?? [],
+        ];
+    }
+
+    /**
+     * Extract tool calls from OpenAI response.
+     */
+    protected function extractToolCalls(array $response): array
+    {
+        $message = $response['choices'][0]['message'] ?? [];
+        return $message['tool_calls'] ?? [];
+    }
+
+    /**
+     * Get assistant message from OpenAI response.
+     */
+    protected function getAssistantMessage(array $response): array
+    {
+        $message = $response['choices'][0]['message'] ?? [];
+        $result = [
+            'role' => 'assistant',
+        ];
+        
+        if (!empty($message['content'])) {
+            $result['content'] = $message['content'];
+        }
+        
+        if (!empty($message['tool_calls'])) {
+            $result['tool_calls'] = $message['tool_calls'];
+        }
+        
+        return $result;
+    }
+
+    /**
+     * Build tool message for OpenAI.
+     */
+    protected function buildToolMessage(array $toolCall, mixed $result): array
+    {
+        $toolCallId = $toolCall['id'] ?? null;
+        $content = is_string($result) ? $result : json_encode($result);
+        
+        return [
+            'role' => 'tool',
+            'tool_call_id' => $toolCallId,
+            'content' => $content,
         ];
     }
 

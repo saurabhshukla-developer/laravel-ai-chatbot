@@ -37,6 +37,18 @@ php artisan migrate
 
 For detailed setup instructions, see [SETUP.md](SETUP.md).
 
+### Updating to Latest Version
+
+If you're already using this package and want to get the latest features (like file-based tools):
+
+```bash
+composer update saurabhshukla-developer/laravel-ai-chatbot
+php artisan migrate
+php artisan cache:clear
+```
+
+**New Feature: File-Based Tools** - Create tools by simply adding PHP files! See [QUICK_START_TOOLS.md](QUICK_START_TOOLS.md) for a 3-step guide.
+
 ## Installation (Detailed)
 
 ### Step 1: Install via Composer
