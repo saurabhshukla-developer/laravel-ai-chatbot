@@ -134,7 +134,15 @@ return [
 
 #### Method 1: File-Based Tools (Recommended - Easiest!)
 
-Create PHP files in `app/Tools/` directory:
+**Super Easy - Use Artisan Command:**
+
+```bash
+php artisan chatbot:make-tool Calculator
+```
+
+That's it! Edit `app/Tools/CalculatorTool.php` and customize it.
+
+**Or create manually** - Create PHP files in `app/Tools/` directory:
 
 ```php
 <?php
@@ -178,6 +186,13 @@ class CalculatorTool extends BaseTool
 ```
 
 **That's it!** The tool is automatically discovered and available for your agents. No database setup needed!
+
+**Available Commands:**
+- `php artisan chatbot:make-tool Name` - Create a new tool
+- `php artisan chatbot:test-tool slug` - Test a tool
+- `php artisan chatbot:list-tools` - List all tools
+
+See [EASY_TOOL_CREATION.md](EASY_TOOL_CREATION.md) for details.
 
 #### Method 2: Database Tools (Via Web UI)
 

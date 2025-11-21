@@ -32,6 +32,12 @@ class ChatbotServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
 
         if ($this->app->runningInConsole()) {
+            $this->commands([
+                \LaravelAI\Chatbot\Console\Commands\MakeToolCommand::class,
+                \LaravelAI\Chatbot\Console\Commands\TestToolCommand::class,
+                \LaravelAI\Chatbot\Console\Commands\ListToolsCommand::class,
+            ]);
+
             $this->publishes([
                 __DIR__.'/../config/chatbot.php' => config_path('chatbot.php'),
             ], 'chatbot-config');

@@ -106,13 +106,13 @@ abstract class BaseProvider implements ProviderInterface
         while ($iteration < $maxIterations) {
             // Build payload with current messages
             $payload = $this->buildPayload($agent, $message, $options, $messages);
-            
-            $response = Http::withHeaders($headers)
-                ->post($this->getChatEndpoint(), $payload);
 
-            if (!$response->successful()) {
-                throw new \Exception('API request failed: ' . $response->body());
-            }
+        $response = Http::withHeaders($headers)
+            ->post($this->getChatEndpoint(), $payload);
+
+        if (!$response->successful()) {
+            throw new \Exception('API request failed: ' . $response->body());
+        }
 
             $responseData = $response->json();
             $lastResponse = $responseData;
@@ -135,15 +135,31 @@ abstract class BaseProvider implements ProviderInterface
                 // No tool calls, return the final response with executed tools info
                 $finalResponse = $this->parseResponse($responseData);
                 $finalResponse['executed_tools'] = $executedTools; // Add executed tools info
+                
+                // Also include tool_calls from executed tools for reference
+                if (!empty($executedTools)) {
+                    $toolCallsData = [];
+                    foreach ($executedTools as $tool) {
+                        if (isset($tool['full_tool_call'])) {
+                            $toolCallsData[] = $tool['full_tool_call'];
+                        }
+                    }
+                    if (!empty($toolCallsData)) {
+                        $finalResponse['tool_calls'] = $toolCallsData;
+                    }
+                }
+                
                 return $finalResponse;
             }
 
-            // Track tool calls for this iteration
+            // Track tool calls for this iteration (preserve full tool call info)
             foreach ($toolCalls as $toolCall) {
                 $executedTools[] = [
                     'name' => $this->getToolNameFromCall($toolCall),
                     'arguments' => $this->getToolArgumentsFromCall($toolCall),
                     'iteration' => $iteration + 1,
+                    'tool_call_id' => $toolCall['id'] ?? null,
+                    'full_tool_call' => $toolCall, // Preserve complete tool call data
                 ];
             }
 
