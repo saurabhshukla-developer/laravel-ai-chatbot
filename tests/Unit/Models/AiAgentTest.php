@@ -25,6 +25,20 @@ class AiAgentTest extends TestCase
         ]);
     }
 
+    public function test_agent_can_be_viewed()
+    {
+        $agent = AiAgent::create([
+            'name' => 'Test Agent',
+            'slug' => 'test-agent',
+            'provider' => 'openai',
+            'is_active' => true,
+        ]);
+
+        $response = $this->get(route('chatbot.agents.show', $agent));
+        $response->assertStatus(200);
+        $response->assertSee('Test Agent');
+    }
+
     public function test_slug_is_auto_generated_from_name()
     {
         $agent = AiAgent::create([

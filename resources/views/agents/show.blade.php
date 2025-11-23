@@ -59,7 +59,7 @@
             </div>
         @endif
 
-        @if($agent->tools->count() > 0)
+        @if($agent->tools?->count() > 0)
             <div class="mb-4">
                 <h3 class="text-lg font-semibold text-gray-900 mb-2">Tools</h3>
                 <ul class="list-disc list-inside">
