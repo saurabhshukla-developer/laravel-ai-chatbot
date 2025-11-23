@@ -17,13 +17,11 @@ class AiAgent extends Model
         'model',
         'system_prompt',
         'config',
-        'tools',
         'is_active',
     ];
 
     protected $casts = [
         'config' => 'array',
-        'tools' => 'array',
         'is_active' => 'boolean',
     ];
 
@@ -78,8 +76,8 @@ class AiAgent extends Model
         }
 
         // Fallback to legacy tools field if no relationships exist
-        if (empty($formattedTools) && !empty($this->tools)) {
-            return $this->tools;
+        if (empty($formattedTools) && !empty($this->attributes['tools'])) {
+            return json_decode($this->attributes['tools'], true) ?? [];
         }
 
         return $formattedTools;

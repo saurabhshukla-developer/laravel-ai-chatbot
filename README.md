@@ -5,20 +5,24 @@
 [![PHP Version](https://img.shields.io/badge/php-%3E%3D8.1-blue.svg)](https://www.php.net/)
 [![Laravel Version](https://img.shields.io/badge/laravel-10.x%20%7C%2011.x%20%7C%2012.x-red.svg)](https://laravel.com/)
 
-A comprehensive Laravel package for building AI agents with support for multiple AI providers (OpenAI, Anthropic, Google AI). Manage API keys, create AI agents, and interact with them seamlessly in your Laravel application.
+A comprehensive Laravel package for building AI-powered chatbots and agents with support for multiple AI providers (OpenAI, Anthropic, Google AI). Features include encrypted API key management, AI agent creation with custom prompts, function calling tools, and a beautiful web interface for managing your AI infrastructure.
 
 **Repository:** [https://github.com/saurabhshukla-developer/laravel-ai-chatbot](https://github.com/saurabhshukla-developer/laravel-ai-chatbot)
 
-## Features
+## ✨ Features
 
-- API key management with encrypted storage
-- AI agent builder with custom prompts
-- **Tool management** - Create and assign function calling tools to agents
-- Multiple provider support (OpenAI, Anthropic, Google AI)
-- Built-in chat interface
-- Web UI for managing keys, agents, and tools
-- Programmatic API for code integration
-- Streaming support for responses
+- 🔐 **Secure API Key Management** - Encrypted storage with support for multiple providers
+- 🤖 **AI Agent Builder** - Create custom AI agents with personalized prompts and configurations
+- 🛠️ **Function Calling Tools** - Powerful tool system for extending AI capabilities
+  - File-based tools (auto-discovered PHP classes)
+  - Database-backed tools (managed via web UI)
+  - Easy tool creation with artisan commands
+- 🌐 **Multi-Provider Support** - OpenAI, Anthropic (Claude), and Google AI
+- 💬 **Built-in Chat Interface** - Ready-to-use web UI for testing agents
+- 🎨 **Beautiful Web Dashboard** - Manage keys, agents, and tools through an intuitive interface
+- 🔌 **Programmatic API** - Full code integration support for Laravel applications
+- 📡 **Streaming Responses** - Real-time response streaming for better UX
+- ✅ **Fully Tested** - Comprehensive test suite with 51 passing tests
 
 ## Installation
 
@@ -35,7 +39,7 @@ php artisan vendor:publish --provider="LaravelAI\Chatbot\ChatbotServiceProvider"
 php artisan migrate
 ```
 
-For detailed setup instructions, see [SETUP.md](SETUP.md).
+For detailed setup instructions, see [docs/SETUP.md](docs/SETUP.md).
 
 ### Updating to Latest Version
 
@@ -47,9 +51,19 @@ php artisan migrate
 php artisan cache:clear
 ```
 
-**New Feature: File-Based Tools** - Create tools by simply adding PHP files! See [QUICK_START_TOOLS.md](QUICK_START_TOOLS.md) for a 3-step guide.
+**New Feature: File-Based Tools** - Create tools by simply adding PHP files! See [docs/QUICK_START_TOOLS.md](docs/QUICK_START_TOOLS.md) for a 3-step guide.
 
-## Installation (Detailed)
+## 📦 Installation
+
+### Quick Install
+
+```bash
+composer require saurabhshukla-developer/laravel-ai-chatbot:dev-master
+php artisan vendor:publish --provider="LaravelAI\Chatbot\ChatbotServiceProvider"
+php artisan migrate
+```
+
+### Detailed Installation
 
 ### Step 1: Install via Composer
 
@@ -192,7 +206,7 @@ class CalculatorTool extends BaseTool
 - `php artisan chatbot:test-tool slug` - Test a tool
 - `php artisan chatbot:list-tools` - List all tools
 
-See [EASY_TOOL_CREATION.md](EASY_TOOL_CREATION.md) for details.
+See [docs/EASY_TOOL_CREATION.md](docs/EASY_TOOL_CREATION.md) for details.
 
 #### Method 2: Database Tools (Via Web UI)
 
@@ -201,8 +215,8 @@ See [EASY_TOOL_CREATION.md](EASY_TOOL_CREATION.md) for details.
 3. Fill in the tool details and save
 
 For detailed examples, see:
-- **[TOOLS_README.md](TOOLS_README.md)** - File-based tools guide (Recommended)
-- **[TOOLS_EXAMPLES.md](TOOLS_EXAMPLES.md)** - Database tools and advanced examples
+- **[docs/TOOLS_README.md](docs/TOOLS_README.md)** - File-based tools guide (Recommended)
+- **[docs/TOOLS_EXAMPLES.md](docs/TOOLS_EXAMPLES.md)** - Database tools and advanced examples
 
 ### Using Agents in Code
 
@@ -286,7 +300,28 @@ $calculatorTool = Tool::where('slug', 'calculator')->first();
 $agent->tools()->attach($calculatorTool->id);
 ```
 
-For more tool examples, see [TOOLS_EXAMPLES.md](TOOLS_EXAMPLES.md)
+For more tool examples, see [docs/TOOLS_EXAMPLES.md](docs/TOOLS_EXAMPLES.md)
+
+## 📚 Documentation
+
+Comprehensive documentation is available in the [`docs/`](docs/) directory:
+
+### Getting Started
+- **[Quick Start Tools](docs/QUICK_START_TOOLS.md)** - Create your first tool in 3 steps
+- **[Setup Guide](docs/SETUP.md)** - Detailed installation and configuration
+- **[Quickstart](docs/QUICKSTART.md)** - Quick overview of the package
+
+### Tools & Development
+- **[Tools Guide](docs/TOOLS_README.md)** - Complete guide to creating and using tools
+- **[Tool Examples](docs/TOOLS_EXAMPLES.md)** - Real-world examples and use cases
+- **[Easy Tool Creation](docs/EASY_TOOL_CREATION.md)** - Simplified tool creation guide
+
+### Testing & Troubleshooting
+- **[Testing Guide](docs/TESTING.md)** - Comprehensive testing documentation
+- **[Troubleshooting](docs/TROUBLESHOOTING.md)** - Common issues and solutions
+- **[Tool Troubleshooting](docs/TROUBLESHOOTING_TOOLS.md)** - Tool-specific issues
+
+See [docs/README.md](docs/README.md) for the complete documentation index.
 
 ### Direct Provider Access
 
@@ -394,34 +429,45 @@ php artisan vendor:publish --tag="chatbot-views"
 
 Views will be published to `resources/views/vendor/chatbot/`.
 
-## Requirements
+## 📋 Requirements
 
-- PHP 8.1 or higher
-- Laravel 10.x, 11.x, or 12.x
-- Guzzle HTTP Client
+- **PHP:** 8.1 or higher
+- **Laravel:** 10.x, 11.x, or 12.x
+- **Dependencies:** Guzzle HTTP Client (automatically installed)
+- **Database:** MySQL, PostgreSQL, or SQLite
 
-## License
+## 🤝 Contributing
 
-MIT License
+Contributions are welcome! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
-## Contributing
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-Contributions are welcome. Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+## 🐛 Support & Issues
 
-## Support
+- **Bug Reports**: [GitHub Issues](https://github.com/saurabhshukla-developer/laravel-ai-chatbot/issues)
+- **Security Issues**: See [SECURITY.md](.github/SECURITY.md) for reporting vulnerabilities
+- **Documentation**: Check [docs/](docs/) for detailed guides
 
-- **Issues**: [GitHub Issues](https://github.com/saurabhshukla-developer/laravel-ai-chatbot/issues)
-- **Security**: See [SECURITY.md](.github/SECURITY.md) for reporting security vulnerabilities
-- **Changelog**: See [CHANGELOG.md](CHANGELOG.md) for version history
+## 📝 Changelog
 
-## Author
+See [CHANGELOG.md](CHANGELOG.md) for a complete list of changes and version history.
+
+## 👤 Author
 
 **Saurabh Shukla**
 
 - GitHub: [@saurabhshukla-developer](https://github.com/saurabhshukla-developer)
-- Repository: [laravel-ai-chatbot](https://github.com/saurabhshukla-developer/laravel-ai-chatbot)
+- Email: saurabhshukla.developer@gmail.com
 
-## License
+## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+**Made with ❤️ for the Laravel community**
 

@@ -53,10 +53,13 @@ abstract class TestCase extends Orchestra
             ]);
         }
 
-        // Set app key for encryption
+        // Set app key for encryption (32 characters base64 encoded)
         $app['config']->set('app.key', env('APP_KEY', 'base64:' . base64_encode(
             \Illuminate\Support\Str::random(32)
         )));
+        
+        // Ensure cipher is set
+        $app['config']->set('app.cipher', 'AES-256-CBC');
     }
 }
 
