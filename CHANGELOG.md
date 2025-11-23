@@ -5,6 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2025-11-23
+
+### Fixed
+- Fixed tools folder-info route 500 error (route ordering issue)
+- Fixed Blade template ParseError for PHP code examples
+- Fixed agent tools relationship access in tests
+- Improved error handling in ToolController
+
+### Improved
+- Enhanced documentation organization (moved to docs/ folder)
+- Professional README.md formatting
+- Comprehensive test coverage (51 tests, 100% passing)
+- Added MySQL support for testing alongside SQLite
+- Improved code quality and error handling
+
+### Documentation
+- Organized all documentation into `docs/` folder
+- Created comprehensive documentation index
+- Added CODE_QUALITY.md and REVIEW_SUMMARY.md
+- Updated TEST_FIXES.md with final test status
+- Professional formatting throughout
+
+### Testing
+- Added comprehensive test suite:
+  - Unit tests for Tool model, ToolLoader, BaseTool
+  - Feature tests for ToolController
+  - Tests for Agent-Tools relationships
+- All 51 tests passing (100% success rate)
+- 99 assertions covering all components
+
 ## [1.1.0] - 2025-11-21
 
 ### Added

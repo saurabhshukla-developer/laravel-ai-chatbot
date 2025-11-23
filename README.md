@@ -26,6 +26,12 @@ A comprehensive Laravel package for building AI-powered chatbots and agents with
 
 ## Installation
 
+**For stable release (recommended):**
+```bash
+composer require saurabhshukla-developer/laravel-ai-chatbot:^1.1.1
+```
+
+**For development version:**
 ```bash
 composer config repositories.laravel-ai-chatbot vcs https://github.com/saurabhshukla-developer/laravel-ai-chatbot
 composer require saurabhshukla-developer/laravel-ai-chatbot:dev-master
@@ -43,13 +49,19 @@ For detailed setup instructions, see [docs/SETUP.md](docs/SETUP.md).
 
 ### Updating to Latest Version
 
-If you're already using this package and want to get the latest features (like file-based tools):
+If you're already using this package and want to update to version 1.1.1:
 
 ```bash
 composer update saurabhshukla-developer/laravel-ai-chatbot
 php artisan migrate
 php artisan cache:clear
 ```
+
+**What's New in 1.1.1:**
+- Fixed tools folder-info route errors
+- Enhanced documentation organization
+- Comprehensive test coverage (51 tests, 100% passing)
+- Professional documentation formatting
 
 **New Feature: File-Based Tools** - Create tools by simply adding PHP files! See [docs/QUICK_START_TOOLS.md](docs/QUICK_START_TOOLS.md) for a 3-step guide.
 
@@ -67,6 +79,12 @@ php artisan migrate
 
 ### Step 1: Install via Composer
 
+**Stable release (recommended):**
+```bash
+composer require saurabhshukla-developer/laravel-ai-chatbot:^1.1.1
+```
+
+**Development version:**
 ```bash
 # Add repository first
 composer config repositories.laravel-ai-chatbot vcs https://github.com/saurabhshukla-developer/laravel-ai-chatbot
