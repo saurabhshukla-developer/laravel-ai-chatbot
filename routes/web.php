@@ -32,6 +32,9 @@ Route::prefix($prefix)->middleware($middleware)->group(function () {
     ]);
 
     // Tools Routes
+    // IMPORTANT: folder-info route must come BEFORE resource route to avoid conflicts
+    Route::get('tools/folder-info', [ToolController::class, 'folderInfo'])->name('chatbot.tools.folder-info');
+    
     Route::resource('tools', ToolController::class)->names([
         'index' => 'chatbot.tools.index',
         'create' => 'chatbot.tools.create',

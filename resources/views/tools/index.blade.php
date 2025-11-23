@@ -10,8 +10,8 @@
             <a href="{{ route('chatbot.tools.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                 Create Database Tool
             </a>
-            <a href="{{ config('chatbot.tools_path', 'app/Tools') }}" target="_blank" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                📁 View Tools Folder
+            <a href="{{ route('chatbot.tools.folder-info') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                📁 Tools Folder Info
             </a>
         </div>
     </div>

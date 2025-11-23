@@ -21,9 +21,50 @@ Contributions are welcome. This document outlines the process for contributing t
    composer install
    ```
 
-3. **Run tests**
+3. **Set up database for testing**
+
+   The package supports both SQLite (default) and MySQL for testing.
+
+   **Option A: SQLite (Recommended - No setup required)**
+   
+   SQLite is the default and requires no configuration. Tests will run automatically using an in-memory database.
+
+   **Option B: MySQL (Optional)**
+   
+   If you want to test with MySQL:
+   
+   1. Copy the example environment file:
+      ```bash
+      cp .env.example .env
+      ```
+   
+   2. Update `.env` with your MySQL credentials:
+      ```env
+      DB_CONNECTION=mysql
+      DB_HOST=127.0.0.1
+      DB_PORT=3306
+      DB_DATABASE=chatbot_test
+      DB_USERNAME=your_username
+      DB_PASSWORD=your_password
+      ```
+   
+   3. Create the test database:
+      ```bash
+      mysql -u your_username -p -e "CREATE DATABASE chatbot_test;"
+      ```
+   
+   4. Run tests with MySQL:
+      ```bash
+      DB_CONNECTION=mysql vendor/bin/phpunit
+      ```
+
+4. **Run tests**
    ```bash
+   # Default (SQLite)
    vendor/bin/phpunit
+   
+   # With MySQL (if configured)
+   DB_CONNECTION=mysql vendor/bin/phpunit
    ```
 
 ## Development Workflow
@@ -63,10 +104,54 @@ Contributions are welcome. This document outlines the process for contributing t
 
 ## Testing
 
+### Database Setup for Testing
+
+The package supports both **SQLite** (default) and **MySQL** for testing.
+
+#### SQLite (Default - Recommended)
+
+SQLite is the default and requires **no setup**. Tests automatically use an in-memory database:
+
+```bash
+vendor/bin/phpunit
+```
+
+#### MySQL (Optional)
+
+To test with MySQL:
+
+1. **Copy environment file:**
+   ```bash
+   cp .env.example .env
+   ```
+
+2. **Configure MySQL in `.env`:**
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=chatbot_test
+   DB_USERNAME=your_username
+   DB_PASSWORD=your_password
+   ```
+
+3. **Create test database:**
+   ```bash
+   mysql -u your_username -p -e "CREATE DATABASE chatbot_test;"
+   ```
+
+4. **Run tests with MySQL:**
+   ```bash
+   DB_CONNECTION=mysql vendor/bin/phpunit
+   ```
+
+### Test Requirements
+
 - Write tests for new features
 - Ensure all existing tests pass
 - Aim for good test coverage
 - Test edge cases and error scenarios
+- Tests should work with both SQLite and MySQL
 
 ## Commit Messages
 

@@ -24,18 +24,39 @@ abstract class TestCase extends Orchestra
 
     protected function getEnvironmentSetUp($app)
     {
-        // Setup default database to use sqlite :memory:
-        $app['config']->set('database.default', 'sqlite');
-        $app['config']->set('database.connections.sqlite', [
-            'driver' => 'sqlite',
-            'database' => ':memory:',
-            'prefix' => '',
-        ]);
+        // Get database connection from environment or default to sqlite
+        $connection = env('DB_CONNECTION', 'sqlite');
+        
+        if ($connection === 'mysql') {
+            // Setup MySQL database for testing
+            $app['config']->set('database.default', 'mysql');
+            $app['config']->set('database.connections.mysql', [
+                'driver' => 'mysql',
+                'host' => env('DB_HOST', '127.0.0.1'),
+                'port' => env('DB_PORT', '3306'),
+                'database' => env('DB_DATABASE', 'chatbot_test'),
+                'username' => env('DB_USERNAME', 'root'),
+                'password' => env('DB_PASSWORD', ''),
+                'charset' => 'utf8mb4',
+                'collation' => 'utf8mb4_unicode_ci',
+                'prefix' => '',
+                'strict' => true,
+                'engine' => null,
+            ]);
+        } else {
+            // Setup default database to use sqlite :memory:
+            $app['config']->set('database.default', 'sqlite');
+            $app['config']->set('database.connections.sqlite', [
+                'driver' => 'sqlite',
+                'database' => env('DB_DATABASE', ':memory:'),
+                'prefix' => '',
+            ]);
+        }
 
         // Set app key for encryption
-        $app['config']->set('app.key', 'base64:' . base64_encode(
+        $app['config']->set('app.key', env('APP_KEY', 'base64:' . base64_encode(
             \Illuminate\Support\Str::random(32)
-        ));
+        )));
     }
 }
 

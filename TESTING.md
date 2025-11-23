@@ -32,10 +32,55 @@ Install development dependencies:
 composer install
 ```
 
-### Run All Tests
+### Database Setup
+
+The package supports both **SQLite** (default) and **MySQL** for testing.
+
+#### SQLite (Default - No Setup Required)
+
+SQLite is the default and uses an in-memory database. No configuration needed:
 
 ```bash
 vendor/bin/phpunit
+```
+
+#### MySQL (Optional)
+
+To test with MySQL:
+
+1. **Copy environment file:**
+   ```bash
+   cp .env.example .env
+   ```
+
+2. **Configure MySQL in `.env`:**
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=chatbot_test
+   DB_USERNAME=your_username
+   DB_PASSWORD=your_password
+   ```
+
+3. **Create test database:**
+   ```bash
+   mysql -u your_username -p -e "CREATE DATABASE chatbot_test;"
+   ```
+
+4. **Run tests with MySQL:**
+   ```bash
+   DB_CONNECTION=mysql vendor/bin/phpunit
+   ```
+
+### Run All Tests
+
+```bash
+# Default (SQLite)
+vendor/bin/phpunit
+
+# With MySQL (if configured)
+DB_CONNECTION=mysql vendor/bin/phpunit
 ```
 
 Or using PHPUnit directly:
