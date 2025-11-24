@@ -1,16 +1,17 @@
 name: PHP Composer
 
 on:
-  push:
-    branches: [ "master" ]
+  # run when PRs are created or edited (so we can check the PR description)
   pull_request:
-    branches: [ "master" ]
+    types: [opened, edited]
 
 permissions:
   contents: read
 
 jobs:
   build:
+    # only run the job if the PR body contains the special tag
+    if: ${{ github.event.pull_request.body != null && contains(github.event.pull_request.body, '[run-unit-tests]') }}
 
     runs-on: ubuntu-latest
 
